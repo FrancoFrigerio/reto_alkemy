@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route, Switch,Redirect} from 'react-router-dom'
+
+import Home from './components/Home.js'
+import Login from './components/Login'
 
 function App() {
+
+  const PrivateRoute = ({component,path,...rest}) =>{
+    if(localStorage.getItem('token')){
+      return <Route component={component} path={path} {...rest}></Route>
+    }else{
+      return <Redirect to="/" {...rest}></Redirect>
+    }
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <header className="container-fluid text-center">
+        <p className="text-info fw-bolder" id="reto">RETO REACT - ALKEMY</p>
+    </header>
+    <Router>
+      <Switch>
+        <PrivateRoute component={Home} path="/home" exact={true}></PrivateRoute>
+        <Route component={Login} path="/" exact={true}></Route>
+      </Switch>
+    </Router>
+
+
+  </>
   );
 }
 
